@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationOptionsInterface, Pagination } from 'src/common/paginate';
+import { HesLogsService } from 'src/hes-logs/hes-logs.service';
 import { Repository } from 'typeorm';
 import { CreateHesCodeDto } from './dto/create-hes-code.dto';
 import { UpdateHesCodeDto } from './dto/update-hes-code.dto';
@@ -8,12 +9,17 @@ import { HesCode } from './entities/hes-code.entity';
 
 @Injectable()
 export class HesCodesService {
-  constructor(@InjectRepository(HesCode) private readonly hesCodesRepository: Repository<HesCode>) {}
+  constructor(
+    @InjectRepository(HesCode) private readonly hesCodesRepository: Repository<HesCode>,
+    private hesLogService: HesLogsService
+  ) {}
 
   async create(createHesCodeDto: CreateHesCodeDto) {
     return await this.hesCodesRepository.save(this.hesCodesRepository.create(createHesCodeDto));
   }
+
   async findAll(options: PaginationOptionsInterface): Promise<Pagination<HesCode>> {
+    //todo: create hesLog object
     const [results, total] = await this.hesCodesRepository.findAndCount({
       take: options.limit,
       skip: options.page,
@@ -26,6 +32,7 @@ export class HesCodesService {
   }
 
   async findOne(id: string) {
+    //todo: create hesLog object
     return await this.hesCodesRepository.findOneOrFail(id);
   }
 

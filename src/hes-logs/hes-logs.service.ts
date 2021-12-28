@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationOptionsInterface, Pagination } from 'src/common/paginate';
+import { Repository } from 'typeorm';
 import { CreateHesLogDto } from './dto/create-hes-log.dto';
-import { UpdateHesLogDto } from './dto/update-hes-log.dto';
+import { HesLog } from './entities/hes-log.entity';
 
 @Injectable()
 export class HesLogsService {
-  create(createHesLogDto: CreateHesLogDto) {
-    return 'This action adds a new hesLog';
+  constructor(@InjectRepository(HesLog) private readonly hesLogsRepository: Repository<HesLog>) {}
+
+  async create(createHesLogDto: CreateHesLogDto) {
+    return await this.hesLogsRepository.save(this.hesLogsRepository.create(createHesLogDto));
   }
 
-  findAll() {
-    return `This action returns all hesLogs`;
+  async findAll(options: PaginationOptionsInterface): Promise<Pagination<HesLog>> {
+    const [results, total] = await this.hesLogsRepository.findAndCount({
+      take: options.limit,
+      skip: options.page,
+    });
+
+    return new Pagination<HesLog>({
+      results,
+      total,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} hesLog`;
-  }
-
-  update(id: number, updateHesLogDto: UpdateHesLogDto) {
-    return `This action updates a #${id} hesLog`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} hesLog`;
+  async findOne(id: string) {
+    return await this.hesLogsRepository.findOneOrFail(id);
   }
 }
