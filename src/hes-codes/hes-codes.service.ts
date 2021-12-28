@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationOptionsInterface, Pagination } from 'src/common/paginate';
+import { Repository } from 'typeorm';
 import { CreateHesCodeDto } from './dto/create-hes-code.dto';
 import { UpdateHesCodeDto } from './dto/update-hes-code.dto';
+import { HesCode } from './entities/hes-code.entity';
 
 @Injectable()
 export class HesCodesService {
-  create(createHesCodeDto: CreateHesCodeDto) {
-    return 'This action adds a new hesCode';
+  constructor(@InjectRepository(HesCode) private readonly hesCodesRepository: Repository<HesCode>) {}
+
+  async create(createHesCodeDto: CreateHesCodeDto) {
+    return await this.hesCodesRepository.save(this.hesCodesRepository.create(createHesCodeDto));
+  }
+  async findAll(options: PaginationOptionsInterface): Promise<Pagination<HesCode>> {
+    const [results, total] = await this.hesCodesRepository.findAndCount({
+      take: options.limit,
+      skip: options.page,
+    });
+
+    return new Pagination<HesCode>({
+      results,
+      total,
+    });
   }
 
-  findAll() {
-    return `This action returns all hesCodes`;
+  async findOne(id: string) {
+    return await this.hesCodesRepository.findOneOrFail(id);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} hesCode`;
+  async update(id: string, updateHesCodeDto: UpdateHesCodeDto) {
+    return await this.hesCodesRepository.update(id, updateHesCodeDto);
   }
 
-  update(id: number, updateHesCodeDto: UpdateHesCodeDto) {
-    return `This action updates a #${id} hesCode`;
+  async remove(id: string) {
+    return await this.hesCodesRepository.softDelete(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} hesCode`;
+  async restore(id: string) {
+    return await this.hesCodesRepository.restore(id);
   }
 }
