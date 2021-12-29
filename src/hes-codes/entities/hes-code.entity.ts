@@ -5,7 +5,7 @@ import { HesLog } from '../../hes-logs/entities/hes-log.entity';
 
 @Entity()
 export class HesCode extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.hesCodes)
+  @ManyToOne(() => User, (user) => user.hesCodes, { eager: true })
   owner: User;
 
   @Column({ nullable: true, default: null })
