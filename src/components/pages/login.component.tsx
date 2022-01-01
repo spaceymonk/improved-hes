@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
-import { getCurrentUser } from '../services/auth.service';
+import { getCurrentUser } from '../../services/auth.service';
 import React from 'react';
-import { login } from '../services/auth.service';
+import { login } from '../../services/auth.service';
 
 export const LoginPage = () => {
   let navigate = useNavigate();
