@@ -34,8 +34,8 @@ export class HesCodesController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string, @Request() req) {
-    return this.hesCodesService.getHealthData(id, req.user, req.clientId);
+  async query(@Param('id') id: string, @Request() req) {
+    return this.hesCodesService.query(id, req.user, req.clientId);
   }
 
   @UseGuards(JwtAuthGuard)

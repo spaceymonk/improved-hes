@@ -54,7 +54,7 @@ export class HesCodesService {
     return await this.hesCodesRepository.restore(id);
   }
 
-  async getHealthData(id: string, inquierer: User, clientId: string) {
+  async query(id: string, inquierer: User, clientId: string) {
     const hesCode = await this.hesCodesRepository.findOneOrFail(id);
     const hesLog: CreateHesLogDto = {
       details: clientId || 'UNKNOWN',
