@@ -63,7 +63,7 @@ export class HesCodesService {
       location: 'example-location',
     };
     await this.hesLogsService.create(hesLog);
-    return { healtData: hesCode.owner.healthData };
+    return { healthData: hesCode.owner.healthData };
   }
 
   async hasOwned(hesId: string, user: User) {
