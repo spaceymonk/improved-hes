@@ -4,16 +4,15 @@ const LOGIN_URL = 'http://localhost:3001/auth/login/';
 
 export async function login(username: string, password: string) {
   return axios
-    .post(LOGIN_URL, {
-      username,
-      password,
-    })
+    .post(LOGIN_URL, { username, password })
     .then((response) => {
       if (response.data.accessToken) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
-
       return response.data;
+    })
+    .catch(() => {
+      return null;
     });
 }
 
