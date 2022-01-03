@@ -17,15 +17,8 @@ export class UsersService {
   }
 
   async findAll(options: PaginationOptionsInterface): Promise<Pagination<User>> {
-    const [results, total] = await this.usersRepository.findAndCount({
-      take: options.limit,
-      skip: options.page,
-    });
-
-    return new Pagination<User>({
-      results,
-      total,
-    });
+    const [results, total] = await this.usersRepository.findAndCount({ take: options.limit, skip: options.page });
+    return new Pagination<User>({ results, total });
   }
 
   async findOne(id: string) {
@@ -39,9 +32,5 @@ export class UsersService {
 
   async remove(id: string) {
     return await this.usersRepository.softDelete(id);
-  }
-
-  async restore(id: string) {
-    return await this.usersRepository.restore(id);
   }
 }

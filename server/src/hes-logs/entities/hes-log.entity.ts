@@ -13,11 +13,11 @@ export class HesLog {
   @Column()
   details: string;
 
-  @Column()
+  @Column({ type: 'text' })
   location: string;
 
   @ManyToOne(() => User, (user) => user.logs)
-  inquirer: User;
+  inquierer: User;
 
   @ManyToOne(() => HesCode, (hesCode) => hesCode.logs)
   hesCode: HesCode;

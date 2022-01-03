@@ -1,6 +1,6 @@
 import React from 'react';
 import { getCurrentUser } from '../../services/auth.service';
-import { query as queryHesCode } from '../../services/hes-code.service';
+import { query } from '../../services/query.service';
 
 export const QueryPage = () => {
   const currentUser = getCurrentUser();
@@ -13,8 +13,9 @@ export const QueryPage = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
+    setData('');
     try {
-      const response = await queryHesCode(hescodeId);
+      const response = await query(hescodeId);
       if (response) setData(response.data.healthData);
     } catch (e) {
       setError('Something went wrong!');

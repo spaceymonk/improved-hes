@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
@@ -13,49 +12,29 @@ import {
 } from '@nestjs/common';
 import { HesCodesService } from './hes-codes.service';
 import { CreateHesCodeDto } from './dto/create-hes-code.dto';
-import { UpdateHesCodeDto } from './dto/update-hes-code.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { QueryService } from 'src/query/query.service';
 
 @Controller('hes-codes')
 export class HesCodesController {
-  constructor(private readonly hesCodesService: HesCodesService) {}
+  constructor(private readonly hesCodesService: HesCodesService, private readonly queryService: QueryService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createHesCodeDto: CreateHesCodeDto, @Request() req) {
-    return this.hesCodesService.create(createHesCodeDto, req.user);
+  async create(@Body() createHesCodeDto: CreateHesCodeDto, @Request() req: any) {
+    return await this.hesCodesService.create(createHesCodeDto, req.user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Query('page') page: number, @Query('limit') limit: number, @Request() req) {
-    return this.hesCodesService.findAll(req.user, { page, limit });
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async query(@Param('id') id: string, @Request() req) {
-    return this.hesCodesService.query(id, req.user, req.clientId);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHesCodeDto: UpdateHesCodeDto, @Request() req) {
-    if (this.hesCodesService.hasOwned(id, req.user)) return this.hesCodesService.update(id, updateHesCodeDto);
-    else throw new UnauthorizedException();
+  async findAll(@Query('page') page: number, @Query('limit') limit: number, @Request() req: any) {
+    return await this.hesCodesService.findAll(req.user, { page, limit });
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string, @Request() req) {
-    if (this.hesCodesService.hasOwned(id, req.user)) return this.hesCodesService.remove(id);
-    else throw new UnauthorizedException();
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post(':id')
-  restore(@Param('id') id: string, @Request() req) {
-    if (this.hesCodesService.hasOwned(id, req.user)) return this.hesCodesService.restore(id);
+  async remove(@Param('id') id: string, @Request() req: any) {
+    if (await this.queryService.hasOwned(id, req.user)) return await this.hesCodesService.remove(id);
     else throw new UnauthorizedException();
   }
 }

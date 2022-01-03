@@ -20,6 +20,6 @@ export class User extends BaseEntity {
   @OneToMany(() => HesCode, (hesCode) => hesCode.owner)
   hesCodes: HesCode[];
 
-  @OneToMany(() => HesLog, (hesLog) => hesLog.inquirer)
+  @OneToMany(() => HesLog, (hesLog) => hesLog.inquierer)
   logs: HesLog[];
 }

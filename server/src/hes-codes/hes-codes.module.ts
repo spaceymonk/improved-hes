@@ -3,10 +3,10 @@ import { HesCodesService } from './hes-codes.service';
 import { HesCodesController } from './hes-codes.controller';
 import { HesCode } from './entities/hes-code.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HesLogsModule } from 'src/hes-logs/hes-logs.module';
+import { QueryModule } from 'src/query/query.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([HesCode]), forwardRef(() => HesLogsModule)],
+  imports: [TypeOrmModule.forFeature([HesCode]), forwardRef(() => QueryModule)],
   controllers: [HesCodesController],
   providers: [HesCodesService],
   exports: [HesCodesService],

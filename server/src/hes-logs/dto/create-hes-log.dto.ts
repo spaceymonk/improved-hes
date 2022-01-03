@@ -6,7 +6,7 @@ export class CreateHesLogDto {
 
   location!: string;
 
-  inquirer!: User;
+  inquierer!: User;
 
   hesCode!: HesCode;
 }
